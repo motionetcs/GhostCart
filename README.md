@@ -18,6 +18,12 @@ GitHub Pages deployment:
 https://motionetcs.github.io/SlopScan/
 ```
 
+Vercel deployment:
+
+```text
+https://slopscan-tau.vercel.app/
+```
+
 ## Core Flow
 
 1. Paste a product URL.
@@ -94,6 +100,12 @@ Vercel uses the same production build:
 ```text
 npm run build
 dist/
+```
+
+Live Vercel app:
+
+```text
+https://slopscan-tau.vercel.app/
 ```
 
 ## Note
