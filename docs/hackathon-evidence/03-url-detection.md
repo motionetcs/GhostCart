@@ -1,3 +1,3 @@
 # URL Detection
 
-SlopScan detects marketplace source from supported product URLs and guides users into review import.
+GhostCart detects marketplace source from supported product URLs and guides users into review import.

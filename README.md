@@ -1,37 +1,37 @@
-# SlopScan
+# GhostCart
 
-SlopScan is a privacy-conscious review trust analyzer for online shopping. Shoppers paste a product URL, paste or import reviews, and get an explainable dashboard that shows the review patterns behind the rating.
+GhostCart is a privacy-conscious review trust analyzer for online shopping. Shoppers paste a product URL, paste or import reviews, and get an explainable dashboard that shows the review patterns behind the rating.
 
 ## Separate Product Description
 
-SlopScan helps online shoppers decide whether product reviews are useful, repetitive, promotional, mismatched, or grounded in real buyer experience. It does not claim to prove that a review is fake. Instead, it turns pasted marketplace reviews into a clear trust report with review-risk scoring, repeated phrase clusters, buyer issue extraction, seller-claim support checks, and a copyable summary for quick decisions.
+GhostCart helps online shoppers decide whether product reviews are useful, repetitive, promotional, mismatched, or grounded in real buyer experience. It does not claim to prove that a review is fake. Instead, it turns pasted marketplace reviews into a clear trust report with review-risk scoring, repeated phrase clusters, buyer issue extraction, seller-claim support checks, and a copyable summary for quick decisions.
 
 Short pitch:
 
 ```text
-SlopScan is a review trust layer for online shopping. Paste a product URL, paste or import reviews, and get an explainable dashboard that reveals suspicious patterns, real buyer issues, and claim-support gaps before you buy.
+GhostCart is a review trust layer for online shopping. Paste a product URL, paste or import reviews, and get an explainable dashboard that reveals suspicious patterns, real buyer issues, and claim-support gaps before you buy.
 ```
 
 ## Real Product Name
 
-The official product name is **SlopScan**.
+The official product name is **GhostCart**.
 
 Canonical GitHub repository:
 
 ```text
-https://github.com/motionetcs/SlopScan
+https://github.com/motionetcs/GhostCart
 ```
 
 GitHub Pages deployment:
 
 ```text
-https://motionetcs.github.io/SlopScan/
+https://motionetcs.github.io/GhostCart/
 ```
 
 Vercel deployment:
 
 ```text
-https://slopscan-tau.vercel.app/
+https://ghostcart-tau.vercel.app/
 ```
 
 ## Core Flow
@@ -74,8 +74,8 @@ http://localhost:5174/ppt-video-storyboard.html
 Live storyboard routes:
 
 ```text
-https://slopscan-tau.vercel.app/ppt-video-storyboard.html
-https://motionetcs.github.io/SlopScan/ppt-video-storyboard.html
+https://ghostcart-tau.vercel.app/ppt-video-storyboard.html
+https://motionetcs.github.io/GhostCart/ppt-video-storyboard.html
 ```
 
 The source files are also in `docs/`.
@@ -116,9 +116,9 @@ dist/
 Live Vercel app:
 
 ```text
-https://slopscan-tau.vercel.app/
+https://ghostcart-tau.vercel.app/
 ```
 
 ## Note
 
-SlopScan flags suspicious review patterns. It does not prove that a review is fake and does not replace human judgment.
+GhostCart flags suspicious review patterns. It does not prove that a review is fake and does not replace human judgment.

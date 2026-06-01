@@ -1,7 +1,7 @@
 {
-  "name": "slopscan",
+  "name": "ghostcart",
   "version": "1.0.0",
-  "description": "SlopScan is a privacy-conscious review trust analyzer that turns pasted marketplace reviews into an explainable trust dashboard.",
+  "description": "GhostCart is a privacy-conscious review trust analyzer that turns pasted marketplace reviews into an explainable trust dashboard.",
   "private": true,
   "type": "module",
   "scripts": {

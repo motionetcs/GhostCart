@@ -1,3 +1,3 @@
 # Privacy
 
-SlopScan avoids restricted scraping and warns users not to paste private data.
+GhostCart avoids restricted scraping and warns users not to paste private data.

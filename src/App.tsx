@@ -43,7 +43,7 @@ const featureCards = [
   {
     icon: ClipboardList,
     title: "Real Buyer Issue Map",
-    copy: "SlopScan extracts repeated buyer problems from reviews that look grounded in real experience.",
+    copy: "GhostCart extracts repeated buyer problems from reviews that look grounded in real experience.",
   },
   {
     icon: Zap,
@@ -59,12 +59,12 @@ const featureCards = [
 
 const faqs = [
   {
-    q: "Does SlopScan guarantee a review is fake?",
-    a: "No. SlopScan flags suspicious patterns and explains the evidence. It does not make absolute accusations.",
+    q: "Does GhostCart guarantee a review is fake?",
+    a: "No. GhostCart flags suspicious patterns and explains the evidence. It does not make absolute accusations.",
   },
   {
     q: "Can it fetch Amazon or Flipkart reviews directly?",
-    a: "SlopScan does not rely on fragile or restricted scraping. It detects the marketplace from a URL, then asks you to paste or import review text for a reliable analysis.",
+    a: "GhostCart does not rely on fragile or restricted scraping. It detects the marketplace from a URL, then asks you to paste or import review text for a reliable analysis.",
   },
   {
     q: "Why do I need to paste reviews?",
@@ -84,7 +84,7 @@ const faqs = [
   },
   {
     q: "What makes it different from a review summarizer?",
-    a: "A summarizer compresses reviews. SlopScan evaluates trust signals, suspicious clusters, review mismatch, unsupported claims, and grounded buyer issues.",
+    a: "A summarizer compresses reviews. GhostCart evaluates trust signals, suspicious clusters, review mismatch, unsupported claims, and grounded buyer issues.",
   },
   {
     q: "Can sellers use this?",
@@ -100,7 +100,7 @@ const faqs = [
   },
   {
     q: "What are the limitations?",
-    a: "SlopScan surfaces evidence from pasted or example reviews. It does not access private marketplace systems, prove intent, or replace human judgment.",
+    a: "GhostCart surfaces evidence from pasted or example reviews. It does not access private marketplace systems, prove intent, or replace human judgment.",
   },
 ];
 
@@ -171,7 +171,7 @@ function App() {
     setUrlNotice("");
     const platform = platformFromUrl(urlValue);
     if (!platform) {
-      setUrlError("Paste a valid http or https product URL. SlopScan will never crash or attempt fragile marketplace scraping.");
+      setUrlError("Paste a valid http or https product URL. GhostCart will never crash or attempt fragile marketplace scraping.");
       setSelectedProduct(null);
       return;
     }
@@ -182,7 +182,7 @@ function App() {
       platform,
     }));
     setUrlNotice(
-      `Detected ${platform}. SlopScan cannot directly fetch reviews from this marketplace in your current environment. Paste reviews below and we will analyze the review-risk signals.`,
+      `Detected ${platform}. GhostCart cannot directly fetch reviews from this marketplace in your current environment. Paste reviews below and we will analyze the review-risk signals.`,
     );
     setManualNotice(`Detected ${platform} URL. Paste or import the reviews you want analyzed; no restricted scraping will be attempted.`);
     setEntryMode("manual");
@@ -279,7 +279,7 @@ function App() {
               <ShoppingBag className="h-5 w-5" aria-hidden="true" />
             </span>
             <span>
-              <span className="block text-base font-semibold text-white">SlopScan</span>
+              <span className="block text-base font-semibold text-white">GhostCart</span>
               <span className="block text-xs text-white/48">Review X-Ray</span>
             </span>
           </button>
@@ -343,7 +343,7 @@ function App() {
                 See the review patterns behind the rating.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-white/68">
-                SlopScan helps you analyze product reviews for repetition, generic praise, promotional wording, thin detail, and other low-trust signals before you buy.
+                GhostCart helps you analyze product reviews for repetition, generic praise, promotional wording, thin detail, and other low-trust signals before you buy.
               </p>
               <p className="mt-4 max-w-xl text-sm leading-6 text-white/48">
                 A trust layer for online shopping. It flags suspicious patterns; it does not prove a review is fake.
@@ -643,7 +643,7 @@ function App() {
               <p className="text-sm uppercase tracking-[0.2em] text-ghost-mint">Review analyzer</p>
               <h2 className="font-display mt-2 text-3xl font-semibold text-white">Analyze reviews from any product page</h2>
               <p className="mt-3 max-w-3xl text-sm leading-6 text-white/60">
-                Paste a product link, import reviews, or drop raw review text. SlopScan checks the language patterns behind the rating and gives you an explainable trust breakdown.
+                Paste a product link, import reviews, or drop raw review text. GhostCart checks the language patterns behind the rating and gives you an explainable trust breakdown.
               </p>
             </div>
             <button
@@ -660,7 +660,7 @@ function App() {
               {
                 icon: LinkIcon,
                 title: "Paste a product URL",
-                copy: "Add a marketplace link so SlopScan can detect the source and guide you through review analysis.",
+                copy: "Add a marketplace link so GhostCart can detect the source and guide you through review analysis.",
                 action: "Analyze URL",
                 onClick: openUrlAnalyzer,
               },
@@ -709,7 +709,7 @@ function App() {
                 {hasSearched ? `Matched example reports for "${query || "all products"}"` : "Explore example reports"}
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-white/56">
-                These examples show how SlopScan explains review-risk signals. They are illustrative reports, not live marketplace listings.
+                These examples show how GhostCart explains review-risk signals. They are illustrative reports, not live marketplace listings.
               </p>
             </div>
             <button
@@ -799,13 +799,13 @@ function App() {
               <p className="text-sm uppercase tracking-[0.2em] text-ghost-mint">How it works</p>
               <h2 className="mt-3 text-3xl font-semibold text-white">Paste reviews, get a second opinion before buying.</h2>
               <p className="mt-4 text-base leading-7 text-white/64">
-                SlopScan checks whether reviews are specific, varied, balanced, and useful. Repeated praise, thin detail,
+                GhostCart checks whether reviews are specific, varied, balanced, and useful. Repeated praise, thin detail,
                 and promotional wording reduce confidence.
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               {[
-                ["1", "Detect source", "Paste a product URL or choose an example category. SlopScan identifies the source without fragile scraping."],
+                ["1", "Detect source", "Paste a product URL or choose an example category. GhostCart identifies the source without fragile scraping."],
                 ["2", "Import reviews", "Paste bulk review text or import a text/CSV file from your own export or copied review list."],
                 ["3", "Read the receipt", "Review trust score, risk signals, repeated wording, buyer issues, and a copyable report."],
               ].map(([step, title, copy]) => (
@@ -839,7 +839,7 @@ function App() {
             <p className="text-sm uppercase tracking-[0.2em] text-ghost-cyan">Why it matters</p>
             <h2 className="mt-3 text-3xl font-semibold text-white">Fake-looking review noise wastes buyer time.</h2>
             <p className="mt-4 text-base leading-7 text-white/64">
-              Star ratings compress too much. SlopScan asks whether reviews look grounded in real product experience,
+              Star ratings compress too much. GhostCart asks whether reviews look grounded in real product experience,
               then separates buyer evidence from generic praise, repeated clusters, ghost reviews, and unsupported seller claims.
             </p>
           </div>
@@ -892,7 +892,7 @@ function App() {
                 <div className="grid gap-4 md:grid-cols-2">
                   {[
                     ["Local pattern analysis", "Review text is analyzed for pattern detection in the app flow. Basic use does not require an account."],
-                    ["No restricted scraping", "Marketplace URLs are validated and categorized, but SlopScan does not pretend to fetch reviews where reliable access is unavailable."],
+                    ["No restricted scraping", "Marketplace URLs are validated and categorized, but GhostCart does not pretend to fetch reviews where reliable access is unavailable."],
                     ["Paste carefully", "Do not paste private information, order IDs, phone numbers, addresses, or personal data into review text."],
                     ["No exposed secrets", "The app uses deterministic local logic and no required paid API keys for the core analysis."],
                   ].map(([title, copy]) => (
@@ -935,7 +935,7 @@ function App() {
       <footer className="border-t border-white/10 px-4 py-8 text-center text-sm text-white/45 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-3">
           <FileText className="h-4 w-4" aria-hidden="true" />
-          SlopScan flags review-risk patterns. It is not legal proof of fake reviews or a replacement for human judgment.
+          GhostCart flags review-risk patterns. It is not legal proof of fake reviews or a replacement for human judgment.
         </div>
       </footer>
     </div>

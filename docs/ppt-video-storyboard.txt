@@ -1,21 +1,21 @@
-SLOPSCAN PPT AND DEMO VIDEO STORYBOARD
+GHOSTCART PPT AND DEMO VIDEO STORYBOARD
 
 Use this for a hackathon pitch deck or 3-4 minute demo video.
 
 Recommended slide style:
 - Use picture on the left and short text on the right.
-- Use screenshots from https://slopscan-tau.vercel.app/ or https://motionetcs.github.io/SlopScan/
+- Use screenshots from https://ghostcart-tau.vercel.app/ or https://motionetcs.github.io/GhostCart/
 - Keep each slide to 3-5 bullets.
 - Use the speaker notes as your video voiceover.
 
 SLIDE 1: TITLE
-Picture: SlopScan hero screenshot.
+Picture: GhostCart hero screenshot.
 Text:
-- SlopScan
+- GhostCart
 - Review Trust Analysis for Online Shopping
 - See the review patterns behind the rating.
 Voiceover:
-SlopScan is a trust layer for online shopping. It helps buyers inspect review quality before trusting a product rating.
+GhostCart is a trust layer for online shopping. It helps buyers inspect review quality before trusting a product rating.
 
 SLIDE 2: THE PROBLEM
 Picture: Product rating with many reviews.
@@ -35,7 +35,7 @@ Text:
 - Analyze suspicious patterns.
 - Get an explainable trust report.
 Voiceover:
-SlopScan focuses on a real shopping workflow: paste a product link, import reviews, and get a dashboard that explains review trust signals.
+GhostCart focuses on a real shopping workflow: paste a product link, import reviews, and get a dashboard that explains review trust signals.
 
 SLIDE 4: CORE USER FLOW
 Picture: 4-step flow.
@@ -65,7 +65,7 @@ Text:
 - Add optional product claims and rating.
 - Clear empty and error states.
 Voiceover:
-Users can paste copied reviews or upload a review file. SlopScan parses review blocks and extracts ratings where available.
+Users can paste copied reviews or upload a review file. GhostCart parses review blocks and extracts ratings where available.
 
 SLIDE 7: ANALYSIS METHODOLOGY
 Picture: Methodology section.
@@ -76,7 +76,7 @@ Text:
 - Seller claim support
 - Q&A quality signals
 Voiceover:
-The scoring is explainable. SlopScan rewards reviews with real usage context and flags repeated language, thin detail, promotional wording, category mismatch, and unsupported claims.
+The scoring is explainable. GhostCart rewards reviews with real usage context and flags repeated language, thin detail, promotional wording, category mismatch, and unsupported claims.
 
 SLIDE 8: RESULT DASHBOARD
 Picture: Trust Receipt tab.
@@ -107,7 +107,7 @@ Text:
 - Flags repeated phrases and low-detail praise.
 - Keeps human judgment in the loop.
 Voiceover:
-SlopScan does not accuse a review of being fake. It explains why a review looks risky so the user can inspect the evidence.
+GhostCart does not accuse a review of being fake. It explains why a review looks risky so the user can inspect the evidence.
 
 SLIDE 11: CLAIMS AND Q&A
 Picture: Claims + Q&A tab.
@@ -117,7 +117,7 @@ Text:
 - Flags generic Q&A answers.
 - Surfaces mismatch between marketing and buyer experience.
 Voiceover:
-If a seller claims long battery life or noise cancelling, SlopScan checks whether grounded reviews support or contradict those claims.
+If a seller claims long battery life or noise cancelling, GhostCart checks whether grounded reviews support or contradict those claims.
 
 SLIDE 12: REPORT SUMMARY
 Picture: Report Summary modal.
@@ -148,7 +148,7 @@ Text:
 - Review text is analyzed in the app flow.
 - Users are warned not to paste private data.
 Voiceover:
-SlopScan is honest about limitations. It avoids fragile marketplace scraping and focuses on transparent analysis of review text the user provides.
+GhostCart is honest about limitations. It avoids fragile marketplace scraping and focuses on transparent analysis of review text the user provides.
 
 SLIDE 15: IMPACT
 Picture: Before/after comparison.
@@ -158,26 +158,26 @@ Text:
 - Surfaces hidden product risks.
 - Encourages better seller transparency.
 Voiceover:
-SlopScan helps shoppers see what ratings hide. It turns review noise into explainable signals.
+GhostCart helps shoppers see what ratings hide. It turns review noise into explainable signals.
 
 SLIDE 16: CLOSING
 Picture: Dashboard or hero screenshot.
 Text:
-- SlopScan
+- GhostCart
 - Review trust, explained.
 - Paste URL -> Import Reviews -> Analyze -> Report
 Voiceover:
-SlopScan is not just a review summarizer. It is a practical review trust analyzer built for real shopping decisions.
+GhostCart is not just a review summarizer. It is a practical review trust analyzer built for real shopping decisions.
 
 3-MINUTE VIDEO SCRIPT
 
 Opening:
-Hi, this is SlopScan, a review trust analyzer for online shopping. The problem is that star ratings are easy to trust but hard to verify. Reviews can be repetitive, promotional, vague, or even unrelated to the product.
+Hi, this is GhostCart, a review trust analyzer for online shopping. The problem is that star ratings are easy to trust but hard to verify. Reviews can be repetitive, promotional, vague, or even unrelated to the product.
 
 Demo flow:
-I start by pasting a product URL. SlopScan detects the marketplace and moves me into the review analysis flow. Since marketplaces often restrict direct review access, the app asks me to paste or import the reviews I want checked.
+I start by pasting a product URL. GhostCart detects the marketplace and moves me into the review analysis flow. Since marketplaces often restrict direct review access, the app asks me to paste or import the reviews I want checked.
 
-Now I paste a few reviews and add optional seller claims like battery life or noise cancelling. When I click Analyze Reviews, SlopScan builds a full trust dashboard.
+Now I paste a few reviews and add optional seller claims like battery life or noise cancelling. When I click Analyze Reviews, GhostCart builds a full trust dashboard.
 
 Dashboard:
 The dashboard shows an overall trust score, review-risk score, human-like review percentage, suspicious review share, and confidence level. The Buyer Issues tab extracts repeated grounded problems from real-looking reviews. The Review X-Ray tab shows which reviews look suspicious and explains the signals. The Claims + Q&A tab compares seller claims with buyer evidence.
@@ -186,7 +186,7 @@ Report:
 Finally, I can open a report summary, copy it, print it, or export JSON. This gives shoppers a shareable trust receipt before buying.
 
 Closing:
-SlopScan does not claim to prove fake reviews. It flags suspicious patterns and explains the evidence, helping buyers make better decisions from the reviews they already see.
+GhostCart does not claim to prove fake reviews. It flags suspicious patterns and explains the evidence, helping buyers make better decisions from the reviews they already see.
 
 SCREENSHOT CHECKLIST
 
@@ -203,4 +203,4 @@ SCREENSHOT CHECKLIST
 
 SHORT PITCH
 
-SlopScan is a review trust layer for online shopping. Users paste a product URL, paste or import reviews, and get an explainable trust dashboard. It flags suspicious review patterns, repeated phrases, generic praise, product mismatch, unsupported seller claims, and grounded buyer issues. It helps shoppers understand the review quality behind a rating before they buy.
+GhostCart is a review trust layer for online shopping. Users paste a product URL, paste or import reviews, and get an explainable trust dashboard. It flags suspicious review patterns, repeated phrases, generic praise, product mismatch, unsupported seller claims, and grounded buyer issues. It helps shoppers understand the review quality behind a rating before they buy.

@@ -2,6 +2,6 @@
 
 Canonical links:
 
-- GitHub: https://github.com/motionetcs/SlopScan
-- GitHub Pages: https://motionetcs.github.io/SlopScan/
-- Vercel: https://slopscan-tau.vercel.app/
+- GitHub: https://github.com/motionetcs/GhostCart
+- GitHub Pages: https://motionetcs.github.io/GhostCart/
+- Vercel: https://ghostcart-tau.vercel.app/

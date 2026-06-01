@@ -11,7 +11,7 @@ export function buildReportSummary(analysis: ProductAnalysis) {
   );
 
   return [
-    `SlopScan Trust Receipt`,
+    `GhostCart Trust Receipt`,
     `Product: ${analysis.product.title}`,
     `Category: ${analysis.product.category}`,
     `Platform: ${analysis.product.platform}`,
@@ -26,6 +26,6 @@ export function buildReportSummary(analysis: ProductAnalysis) {
     `Main buyer issues: ${topIssues || "No repeated grounded buyer issue emerged from this review set."}`,
     `Unsupported/contradicted claims: ${unsupportedClaims.length}`,
     `Summary: ${analysis.summary}`,
-    `Note: SlopScan flags suspicious patterns and does not prove that a review is fake.`,
+    `Note: GhostCart flags suspicious patterns and does not prove that a review is fake.`,
   ].join("\n");
 }

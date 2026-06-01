@@ -187,7 +187,7 @@ function exportAnalysis(analysis: ProductAnalysis) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "slopscan-trust-receipt.json";
+  link.download = "ghostcart-trust-receipt.json";
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -242,7 +242,7 @@ function ReportSummary({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-ghost-mint">Report summary</p>
-            <h3 className="font-display mt-2 text-2xl font-semibold text-white">Shareable SlopScan receipt</h3>
+            <h3 className="font-display mt-2 text-2xl font-semibold text-white">Shareable GhostCart receipt</h3>
             <p className="mt-2 text-sm leading-6 text-white/62">
               Clean judge-friendly summary generated from the current analysis.
             </p>
@@ -405,7 +405,7 @@ export function AnalysisDashboard({
               This analysis flags suspicious patterns. It does not prove a review is fake.
             </div>
             <div className="mt-5 flex items-center justify-center">
-              <ScoreRing score={analysis.trustScore} label="trust score" caption="SlopScan" />
+              <ScoreRing score={analysis.trustScore} label="trust score" caption="GhostCart" />
             </div>
           </div>
         </div>
@@ -526,7 +526,7 @@ export function AnalysisDashboard({
                       <h3 className="text-xl font-semibold text-white">Real Buyer Issue Map</h3>
                     </div>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-white/62">
-                      Stop reading hundreds of reviews. SlopScan extracts repeated problems from reviews that look grounded in real product experience.
+                      Stop reading hundreds of reviews. GhostCart extracts repeated problems from reviews that look grounded in real product experience.
                     </p>
                   </div>
                   <Pill className="border-emerald-300/25 bg-emerald-300/10 text-emerald-100">
