@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   BarChart3,
   CheckCircle2,
+  Clipboard,
   Download,
   FileWarning,
   Flag,
@@ -29,6 +30,7 @@ import type { ProductAnalysis, ReviewAnalysis } from "../types";
 import { CategoryPill, Pill, VerdictPill } from "./Badges";
 import { ProductVisual } from "./ProductVisual";
 import { ScoreRing } from "./ScoreRing";
+import { buildReportSummary } from "../lib/report";
 
 const categoryColors: Record<string, string> = {
   Grounded: "#5ff1c8",
@@ -98,6 +100,20 @@ function ReviewCard({ analysis }: { analysis: ReviewAnalysis }) {
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <CategoryPill category={analysis.category} />
+            <span
+              className={`rounded-full border px-3 py-1 text-xs ${
+                analysis.riskLevel === "High"
+                  ? "border-rose-300/25 bg-rose-300/10 text-rose-100"
+                  : analysis.riskLevel === "Medium"
+                    ? "border-amber-300/25 bg-amber-300/10 text-amber-100"
+                    : "border-emerald-300/25 bg-emerald-300/10 text-emerald-100"
+              }`}
+            >
+              {analysis.riskLevel} risk
+            </span>
+            <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
+              {analysis.detailQuality} detail
+            </span>
             <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-white/60">
               {analysis.review.rating} star
             </span>
@@ -177,6 +193,101 @@ function exportAnalysis(analysis: ProductAnalysis) {
   URL.revokeObjectURL(url);
 }
 
+function printReport() {
+  window.print();
+}
+
+async function copyText(text: string) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // Fall back below for browsers or automated sessions that block Clipboard API writes.
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "true");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  return copied;
+}
+
+function ReportSummary({
+  analysis,
+  onClose,
+}: {
+  analysis: ProductAnalysis;
+  onClose: () => void;
+}) {
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const report = buildReportSummary(analysis);
+
+  async function copyReport() {
+    const copied = await copyText(report);
+    setCopyStatus(copied ? "copied" : "failed");
+    window.setTimeout(() => setCopyStatus("idle"), 1800);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+      <div className="premium-panel max-h-[86vh] w-full max-w-3xl overflow-auto rounded-lg p-5 shadow-glow">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-ghost-mint">Report summary</p>
+            <h3 className="font-display mt-2 text-2xl font-semibold text-white">Shareable GhostCart receipt</h3>
+            <p className="mt-2 text-sm leading-6 text-white/62">
+              Clean judge-friendly summary generated from the current analysis.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
+          >
+            Close
+          </button>
+        </div>
+        <pre className="mt-5 whitespace-pre-wrap rounded-lg border border-white/10 bg-black/28 p-4 text-sm leading-6 text-white/78">
+          {report}
+        </pre>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={copyReport}
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-ghost-mint px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white"
+          >
+            <Clipboard className="h-4 w-4" aria-hidden="true" />
+            {copyStatus === "copied" ? "Copied" : copyStatus === "failed" ? "Copy failed" : "Copy Report"}
+          </button>
+          <button
+            type="button"
+            onClick={printReport}
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            <FileWarning className="h-4 w-4" aria-hidden="true" />
+            Print Report
+          </button>
+          <button
+            type="button"
+            onClick={() => exportAnalysis(analysis)}
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Download JSON
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function AnalysisDashboard({
   analysis,
   onBack,
@@ -185,6 +296,9 @@ export function AnalysisDashboard({
   onBack: () => void;
 }) {
   const [activeTab, setActiveTab] = useState<TabId>("receipt");
+  const [showReport, setShowReport] = useState(false);
+  const generatedAt = useMemo(() => new Date().toLocaleString(), [analysis.product.id]);
+  const analysisMode = analysis.product.analysisMode || (analysis.product.id.startsWith("manual-") ? "User-provided reviews" : "Sample analysis");
   const splitData = useMemo(
     () =>
       Object.entries(analysis.categoryCounts).map(([name, value]) => ({
@@ -202,6 +316,9 @@ export function AnalysisDashboard({
     [analysis],
   );
   const suspiciousReviews = analysis.reviews.filter((item) => item.category === "Suspicious" || item.category === "Ghost");
+  const totalReviews = Math.max(analysis.reviews.length, 1);
+  const suspiciousPct = Math.round(((analysis.categoryCounts.Suspicious + analysis.categoryCounts.Ghost) / totalReviews) * 100);
+  const humanLikePct = Math.round((analysis.categoryCounts.Grounded / totalReviews) * 100);
 
   useEffect(() => {
     setActiveTab("receipt");
@@ -209,22 +326,41 @@ export function AnalysisDashboard({
 
   return (
     <section id="analysis" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      {showReport ? <ReportSummary analysis={analysis} onClose={() => setShowReport(false)} /> : null}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <button
           type="button"
           onClick={onBack}
           className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/75 transition hover:border-white/20 hover:bg-white/10"
         >
-          Back to scan
+          Analyze another product
         </button>
-        <button
-          type="button"
-          onClick={() => exportAnalysis(analysis)}
-          className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-ghost-cyan/40 hover:bg-ghost-cyan/10"
-        >
-          <Download className="h-4 w-4" aria-hidden="true" />
-          Export JSON
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setShowReport(true)}
+            className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-ghost-mint"
+          >
+            <Clipboard className="h-4 w-4" aria-hidden="true" />
+            Report Summary
+          </button>
+          <button
+            type="button"
+            onClick={printReport}
+            className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-ghost-cyan/40 hover:bg-ghost-cyan/10"
+          >
+            <FileWarning className="h-4 w-4" aria-hidden="true" />
+            Print Report
+          </button>
+          <button
+            type="button"
+            onClick={() => exportAnalysis(analysis)}
+            className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-ghost-cyan/40 hover:bg-ghost-cyan/10"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Export JSON
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
@@ -235,16 +371,26 @@ export function AnalysisDashboard({
               <Pill className="border-white/10 bg-white/5 text-white/70">{analysis.product.platform}</Pill>
               <VerdictPill verdict={analysis.finalVerdict} />
               <Pill className="border-cyan-300/25 bg-cyan-300/10 text-cyan-100">{analysis.confidence} confidence</Pill>
+              <Pill className="border-ghost-mint/25 bg-ghost-mint/10 text-ghost-mint">{analysisMode}</Pill>
             </div>
             <h2 className="mt-4 text-2xl font-semibold leading-tight text-white">{analysis.product.title}</h2>
+            <div className="mt-4 grid gap-2 text-sm text-white/62 sm:grid-cols-2">
+              <p>Category: {analysis.product.category}</p>
+              <p>Reviews analyzed: {analysis.reviews.length}</p>
+              <p>Rating supplied: {analysis.product.rating || "Not supplied"}</p>
+              <p>Generated: {generatedAt}</p>
+            </div>
             <p className="mt-3 text-sm leading-6 text-white/64">{analysis.summary}</p>
             {analysis.product.demoNote ? (
               <div className="mt-4 rounded-lg border border-cyan-300/20 bg-cyan-300/10 p-3 text-sm leading-6 text-cyan-50">
-                Demo analysis generated from available or sample review data. {analysis.product.demoNote}
+                {analysis.product.demoNote}
               </div>
             ) : null}
+            <div className="mt-4 rounded-lg border border-amber-300/20 bg-amber-300/10 p-3 text-sm leading-6 text-amber-50">
+              This analysis flags suspicious patterns. It does not prove a review is fake.
+            </div>
             <div className="mt-5 flex items-center justify-center">
-              <ScoreRing score={analysis.trustScore} label="trust score" caption="GhostCard" />
+              <ScoreRing score={analysis.trustScore} label="trust score" caption="GhostCart" />
             </div>
           </div>
         </div>
@@ -276,10 +422,23 @@ export function AnalysisDashboard({
 
           {activeTab === "receipt" ? (
             <div className="grid gap-6">
-              <div className="grid gap-4 md:grid-cols-3">
-                <MetricCard label="Review noise" value={`${analysis.averageSuspicion}/100`} detail="Average suspicious-pattern score across analyzed reviews." tone={analysis.averageSuspicion > 58 ? "risk" : "watch"} />
-                <MetricCard label="Groundedness" value={`${analysis.averageGroundedness}/100`} detail="Experience details, product match, and concrete buyer context." tone={analysis.averageGroundedness > 62 ? "good" : "watch"} />
-                <MetricCard label="Real issues" value={`${analysis.issueMap.length}`} detail="Buyer issues extracted from grounded review evidence." tone={analysis.issueMap.some((item) => item.severity === "High") ? "risk" : "info"} />
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <MetricCard label="Overall trust" value={`${analysis.trustScore}/100`} detail="Weighted trust score across review-risk, detail, repetition, claims, and issues." tone={analysis.trustScore > 70 ? "good" : "watch"} />
+                <MetricCard label="Review-risk" value={`${analysis.averageSuspicion}/100`} detail="Average suspicious-pattern score across analyzed reviews." tone={analysis.averageSuspicion > 58 ? "risk" : "watch"} />
+                <MetricCard label="Human-like reviews" value={`${humanLikePct}%`} detail="Share of reviews with grounded, product-specific buyer context." tone={humanLikePct > 55 ? "good" : "watch"} />
+                <MetricCard label="Suspicious reviews" value={`${suspiciousPct}%`} detail="Share flagged as suspicious or product-mismatched." tone={suspiciousPct > 35 ? "risk" : "info"} />
+                <MetricCard label="Detail quality" value={`${analysis.reviewDetailQuality}/100`} detail="Usage details, limitations, product fit, measurements, and context." tone={analysis.reviewDetailQuality > 62 ? "good" : "watch"} />
+                <MetricCard label="Confidence" value={analysis.confidence} detail="Based on review count, available context, and review detail density." tone={analysis.confidence === "High" ? "good" : "info"} />
+              </div>
+              <div className="premium-panel rounded-lg p-5">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm uppercase tracking-[0.2em] text-ghost-cyan">Final recommendation</p>
+                    <h3 className="font-display mt-2 text-2xl font-semibold text-white">{analysis.finalVerdict}</h3>
+                    <p className="mt-3 max-w-3xl text-sm leading-6 text-white/66">{analysis.summary}</p>
+                  </div>
+                  <VerdictPill verdict={analysis.finalVerdict} />
+                </div>
               </div>
 
               <div className="grid gap-6 xl:grid-cols-2">
@@ -400,7 +559,7 @@ export function AnalysisDashboard({
                 </div>
               ) : (
                 <div className="rounded-lg border border-white/10 bg-white/[0.04] p-6 text-white/66">
-                  No repeated grounded buyer issue emerged from this sample.
+                  No repeated grounded buyer issue emerged from this review set.
                 </div>
               )}
             </div>
@@ -516,7 +675,7 @@ export function AnalysisDashboard({
                 ) : (
                   <div className="flex items-start gap-2 rounded-lg border border-white/10 bg-white/[0.04] p-4">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 text-ghost-mint" aria-hidden="true" />
-                    <p className="text-sm leading-6 text-white/64">No Q&A data was included for this product sample.</p>
+                    <p className="text-sm leading-6 text-white/64">No Q&A data was included for this product.</p>
                   </div>
                 )}
               </div>

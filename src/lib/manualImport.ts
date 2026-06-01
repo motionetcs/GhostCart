@@ -1,9 +1,19 @@
 import type { ManualImportInput, ProductDemo, Review } from "../types";
 
-function inferCategory(title: string) {
+function inferCategory(title: string, category?: string) {
+  const explicit = category?.trim();
+  if (explicit) return explicit;
   const value = title.toLowerCase();
   if (value.includes("earbud") || value.includes("headphone")) return "Wireless Earbuds";
   if (value.includes("charger") || value.includes("usb")) return "USB-C Fast Charger";
+  if (value.includes("phone") || value.includes("mobile")) return "Smartphone";
+  if (value.includes("power bank") || value.includes("powerbank")) return "Power Bank";
+  if (value.includes("stand")) return "Laptop Stand";
+  if (value.includes("mouse")) return "Gaming Mouse";
+  if (value.includes("lamp")) return "Study Lamp";
+  if (value.includes("shoe") || value.includes("sneaker")) return "Shoes";
+  if (value.includes("book")) return "Book";
+  if (value.includes("kitchen") || value.includes("mixer") || value.includes("air fryer")) return "Kitchen Appliance";
   if (value.includes("watch")) return "Smartwatch";
   if (value.includes("backpack") || value.includes("bag")) return "Backpack";
   if (value.includes("skin") || value.includes("serum")) return "Skincare Serum";
@@ -45,6 +55,8 @@ function parseRating(block: string, fallback: number) {
 }
 
 export function createManualProduct(input: ManualImportInput): ProductDemo {
+  const safeTitle = input.title.trim() || "Manual Review Import";
+  const category = inferCategory(safeTitle, input.category);
   const blocks = input.reviewsText
     .split(/\n\s*\n|---+/)
     .map((block) => block.trim())
@@ -71,27 +83,29 @@ export function createManualProduct(input: ManualImportInput): ProductDemo {
       };
     });
 
-  const safeTitle = input.title.trim() || "Manual Review Import";
   const sellerClaims = input.sellerClaims
     .split(/\n|,/)
     .map((claim) => claim.trim())
     .filter(Boolean);
+  const averageRating = Number(input.averageRating);
+  const calculatedRating = reviews.length ? Number((reviews.reduce((sum, item) => sum + item.rating, 0) / reviews.length).toFixed(1)) : 0;
 
   return {
     id: `manual-${Date.now()}`,
     platform: input.platform,
     title: safeTitle,
     price: "Manual import",
-    rating: reviews.length ? Number((reviews.reduce((sum, item) => sum + item.rating, 0) / reviews.length).toFixed(1)) : 0,
+    rating: Number.isFinite(averageRating) && averageRating > 0 ? averageRating : calculatedRating,
     reviewCount: reviews.length,
-    category: inferCategory(safeTitle),
+    category,
     tags: inferTags(safeTitle, input.sellerClaims),
     sellerClaims: sellerClaims.length ? sellerClaims : ["Manual import did not include seller claims"],
     bullets: ["Reviews were pasted manually and analyzed locally in the browser."],
     imageLabel: "manual import",
     imageTone: "mint",
+    analysisMode: "User-provided reviews",
     reviews,
     qa: [],
-    demoNote: "Manual import analysis generated from pasted review text. No data leaves the browser.",
+    demoNote: "User-provided review analysis. No marketplace scraping was used.",
   };
 }

@@ -3,9 +3,18 @@ import type { Platform, ProductDemo } from "../types";
 const aliases: Record<string, string[]> = {
   earbuds: ["earbud", "earbuds", "buds", "airpods", "earphone", "earphones", "headphones", "headset"],
   charger: ["charger", "charging", "adapter", "usb", "usb-c", "type-c", "cable", "100w", "gan"],
+  smartphone: ["smartphone", "phone", "mobile", "camera phone", "android", "5g"],
+  stand: ["laptop stand", "stand", "desk stand", "ergonomic", "aluminum stand"],
+  powerbank: ["power bank", "powerbank", "battery bank", "portable charger", "20000mah"],
+  mouse: ["gaming mouse", "mouse", "dpi", "rgb mouse"],
+  lamp: ["study lamp", "lamp", "desk lamp", "led lamp", "wireless charger"],
   smartwatch: ["smartwatch", "smart watch", "watch", "fitness", "health", "tracker"],
   backpack: ["backpack", "bag", "laptop bag", "rucksack", "office bag", "travel bag"],
   skincare: ["skincare", "skin", "serum", "vitamin", "cream", "brightening"],
+  shaker: ["protein shaker", "shaker", "bottle", "gym bottle", "protein bottle"],
+  shoes: ["shoes", "shoe", "sneaker", "sneakers", "running shoes"],
+  books: ["book", "books", "novel", "paperback", "hardcover"],
+  kitchen: ["kitchen", "appliance", "mixer", "air fryer", "blender", "toaster"],
 };
 
 function clean(value: string) {
@@ -53,12 +62,33 @@ function containsPhrase(haystack: string, phrase: string) {
 }
 
 function aliasBucket(queryTerm: string) {
-  return Object.entries(aliases).find(([bucket, words]) => {
-    return bucket === queryTerm || words.some((word) => word.includes(queryTerm) || queryTerm.includes(word) || dice(queryTerm, word) > 0.42);
-  })?.[0];
+  const exact = Object.entries(aliases).find(([bucket, words]) => bucket === queryTerm || words.includes(queryTerm));
+  if (exact) return exact[0];
+
+  const contained = Object.entries(aliases).find(([, words]) =>
+    words.some((word) => word.length >= 5 && queryTerm.length >= 5 && (word.includes(queryTerm) || queryTerm.includes(word))),
+  );
+  if (contained) return contained[0];
+
+  return Object.entries(aliases).find(([, words]) => words.some((word) => dice(queryTerm, word) > 0.5))?.[0];
 }
 
 function productCategoryBucket(product: ProductDemo) {
+  const category = product.category.toLowerCase();
+  if (category.includes("earbud")) return "earbuds";
+  if (category.includes("fast charger")) return "charger";
+  if (category.includes("smartphone")) return "smartphone";
+  if (category.includes("smartwatch")) return "smartwatch";
+  if (category.includes("backpack")) return "backpack";
+  if (category.includes("skincare")) return "skincare";
+  if (category.includes("laptop stand")) return "stand";
+  if (category.includes("power bank")) return "powerbank";
+  if (category.includes("gaming mouse")) return "mouse";
+  if (category.includes("study lamp")) return "lamp";
+  if (category.includes("shaker")) return "shaker";
+  if (category.includes("shoe")) return "shoes";
+  if (category.includes("book")) return "books";
+  if (category.includes("kitchen") || category.includes("appliance")) return "kitchen";
   return aliasBucket(clean(product.category).split(" ")[0]) || aliasBucket(product.tags[0] || "");
 }
 
@@ -83,12 +113,20 @@ export function scoreProductForQuery(product: ProductDemo, query: string) {
 
 export function searchProductsCatalog(products: ProductDemo[], query: string, platforms: Platform[]) {
   const allowed = new Set(platforms);
-  const queryBuckets = new Set(
-    clean(query)
-      .split(" ")
-      .map((term) => aliasBucket(term))
-      .filter(Boolean),
+  const normalized = clean(query);
+  const phraseBuckets = new Set(
+    Object.entries(aliases)
+      .filter(([bucket, words]) => containsPhrase(normalized, bucket) || words.some((word) => containsPhrase(normalized, word)))
+      .map(([bucket]) => bucket),
   );
+  const queryBuckets = phraseBuckets.size
+    ? phraseBuckets
+    : new Set(
+        normalized
+          .split(" ")
+          .map((term) => aliasBucket(term))
+          .filter(Boolean),
+      );
   const scored = products
     .map((product) => ({ product, score: allowed.has(product.platform) ? scoreProductForQuery(product, query) : 0 }))
     .filter((item) => item.score > 0)
@@ -102,7 +140,15 @@ export function searchProductsCatalog(products: ProductDemo[], query: string, pl
 export const suggestedSearches = [
   "wireless earbuds",
   "USB-C charger",
+  "smartphone",
   "smart watch",
+  "power bank",
   "laptop backpack",
+  "gaming mouse",
+  "study lamp",
   "skincare serum",
+  "protein shaker",
+  "running shoes",
+  "books",
+  "kitchen appliance",
 ];

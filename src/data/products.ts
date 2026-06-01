@@ -1,4 +1,33 @@
-import type { ProductDemo } from "../types";
+import type { ProductDemo, Review } from "../types";
+
+function sampleReviews(prefix: string, productLabel: string, issue: string, context: string): Review[] {
+  return [
+    { id: `${prefix}1`, reviewer: "Avery N.", rating: 4, date: "2026-02-01", verified: true, title: "Useful after a week", body: `I used this ${productLabel} for one week. ${context} worked as expected, but ${issue} showed up during daily use.` },
+    { id: `${prefix}2`, reviewer: "Sam P.", rating: 5, date: "2026-02-01", verified: false, title: "Excellent product", body: "Excellent product, best quality, value for money, highly recommended for everyone." },
+    { id: `${prefix}3`, reviewer: "Mira J.", rating: 2, date: "2026-02-08", verified: true, title: `Issue with ${issue}`, body: `The ${productLabel} felt fine at first, but after ten days ${issue} became noticeable. I would check this before buying.` },
+    { id: `${prefix}4`, reviewer: "Leo R.", rating: 4, date: "2026-02-10", verified: true, title: "Balanced purchase", body: `Good for ${context}. It is not perfect, but the product-specific details match the listing better than most budget options.` },
+    { id: `${prefix}5`, reviewer: "Ina K.", rating: 5, date: "2026-02-02", verified: false, title: "Must buy", body: "Must buy, amazing product, premium quality, very useful and worth every penny." },
+    { id: `${prefix}6`, reviewer: "Noah C.", rating: 3, date: "2026-02-14", verified: true, title: "Works with caveats", body: `For normal use it is okay. The main limitation is ${issue}, especially when I used it for ${context}.` },
+    { id: `${prefix}7`, reviewer: "Tara S.", rating: 1, date: "2026-02-18", verified: true, title: "Returned it", body: `Returned after two weeks because ${issue}. The rest of the product was usable, but this was a deal breaker for me.` },
+    { id: `${prefix}8`, reviewer: "Owen B.", rating: 5, date: "2026-02-02", verified: false, title: "Very nice", body: "Very nice product, best product, great quality, highly recommended and value for money." },
+    { id: `${prefix}9`, reviewer: "Rhea M.", rating: 4, date: "2026-02-22", verified: true, title: "Specific use case review", body: `I bought it mainly for ${context}. The build feels reasonable, and I liked the product-specific design choices.` },
+    { id: `${prefix}10`, reviewer: "Eli V.", rating: 3, date: "2026-02-25", verified: true, title: "Average but not bad", body: `The ${productLabel} is average. I noticed ${issue}, but it still works if expectations are realistic.` },
+    { id: `${prefix}11`, reviewer: "Maya Q.", rating: 5, date: "2026-02-03", verified: false, title: "Perfect product", body: "Perfect product, excellent quality, must buy, very useful, premium and best." },
+    { id: `${prefix}12`, reviewer: "Jon D.", rating: 4, date: "2026-03-01", verified: true, title: "Would buy with one warning", body: `I would buy it again for ${context}, but I would warn people to inspect ${issue} during the return window.` },
+  ];
+}
+
+function ensureSampleDepth(product: ProductDemo) {
+  const sourceLength = product.reviews.length;
+  if (sourceLength >= 12) return;
+  const additions = sampleReviews(
+    `${product.id}-extra-`,
+    product.category.toLowerCase(),
+    product.tags[0] || "durability",
+    product.tags[1] || "daily use",
+  ).slice(0, 12 - sourceLength);
+  product.reviews.push(...additions);
+}
 
 export const demoProducts: ProductDemo[] = [
   {
@@ -605,5 +634,274 @@ export const demoProducts: ProductDemo[] = [
     ],
   },
 ];
+
+const additionalProducts: ProductDemo[] = [
+  {
+    id: "phone-pixelnova-x1",
+    platform: "Amazon",
+    title: "PixelNova X1 Smartphone with 108MP Camera and 5000mAh Battery",
+    price: "$329.00",
+    rating: 4.4,
+    reviewCount: 4218,
+    category: "Smartphone",
+    tags: ["smartphone", "phone", "camera", "battery", "display", "charging", "network", "android"],
+    sellerClaims: [
+      "108MP night camera with AI image processing",
+      "5000mAh battery with all-day backup",
+      "120Hz AMOLED display",
+      "5G-ready dual SIM performance",
+    ],
+    bullets: [
+      "128GB storage and 8GB RAM",
+      "30W fast charger included",
+      "Stereo speakers and in-display fingerprint",
+      "Android security updates promised for 2 years",
+    ],
+    imageLabel: "smartphone",
+    imageTone: "cyan",
+    demoNote: "Phone sample includes repeated camera praise, grounded heating issues, and battery-claim friction.",
+    reviews: [
+      { id: "p1", reviewer: "Anmol R.", rating: 5, date: "2026-05-02", verified: false, title: "Best camera phone", body: "Best camera phone, amazing product, premium quality, highly recommended and value for money." },
+      { id: "p2", reviewer: "Tessa M.", rating: 4, date: "2026-05-07", verified: true, title: "Good display, battery is average", body: "The 120Hz display is smooth and bright outdoors. Battery lasts from 8am to about 7pm with maps and video, not two full days." },
+      { id: "p3", reviewer: "Naveen K.", rating: 2, date: "2026-05-11", verified: true, title: "Gets hot while recording", body: "After 12 minutes of 4K video the phone became hot near the camera module and the app closed once. Photos are good, but video heat is real." },
+      { id: "p4", reviewer: "Isha D.", rating: 3, date: "2026-05-12", verified: true, title: "Network drops in basement", body: "Used with Jio 5G and Airtel. Signal is fine at home, but in my office basement calls drop more than my old Samsung." },
+      { id: "p5", reviewer: "Kai B.", rating: 5, date: "2026-05-03", verified: false, title: "Excellent smartphone", body: "Excellent smartphone, best display, best camera, must buy, value for money." },
+      { id: "p6", reviewer: "Riya S.", rating: 4, date: "2026-05-15", verified: true, title: "Charging is quick", body: "Charger took it from 18% to 73% in 38 minutes. The phone feels slightly warm but not alarming during normal charging." },
+      { id: "p7", reviewer: "Marcus J.", rating: 2, date: "2026-05-18", verified: true, title: "Fingerprint scanner misses", body: "The in-display fingerprint reader misses twice out of five tries with a tempered glass protector. Face unlock works better indoors." },
+      { id: "p8", reviewer: "Dina P.", rating: 5, date: "2026-05-03", verified: false, title: "Highly recommended", body: "Highly recommended phone with amazing camera and premium display. Very useful and best quality." },
+      { id: "p9", reviewer: "Owen L.", rating: 4, date: "2026-05-21", verified: true, title: "Good value after setup", body: "Transferred data from my Pixel in 45 minutes. I had to remove three preinstalled shopping apps, but camera and speakers are solid for the price." },
+      { id: "p10", reviewer: "Meera T.", rating: 1, date: "2026-05-25", verified: true, title: "Green tint on low brightness", body: "At low brightness the AMOLED panel shows a green tint on grey backgrounds. Replacement unit was better but still visible at night." },
+    ],
+    qa: [
+      { question: "Does it include charger in box?", answer: "Yes, the box includes a 30W charger and USB-C cable." },
+      { question: "Is the camera good at night?", answer: "Night photos are strong, but video recording can heat up according to buyer reviews." },
+    ],
+  },
+  {
+    id: "stand-flexrise-pro",
+    platform: "Flipkart",
+    title: "FlexRise Pro Aluminum Laptop Stand for Desk Setup",
+    price: "₹1,099",
+    rating: 4.5,
+    reviewCount: 1186,
+    category: "Laptop Stand",
+    tags: ["laptop stand", "stand", "aluminum", "desk", "wobble", "height", "typing", "macbook"],
+    sellerClaims: [
+      "Aircraft-grade aluminum body",
+      "Rock-solid typing support",
+      "Fits all laptops up to 17 inches",
+      "Improves cooling and posture",
+    ],
+    bullets: [
+      "Foldable desk stand with silicone pads",
+      "Open frame for airflow",
+      "Six height adjustment levels",
+      "Portable sleeve included",
+    ],
+    imageLabel: "laptop stand",
+    imageTone: "amber",
+    demoNote: "Laptop stand sample balances real ergonomic praise with grounded wobble and fit complaints.",
+    reviews: [
+      { id: "ls1", reviewer: "Devika N.", rating: 4, date: "2026-04-01", verified: true, title: "Good height for video calls", body: "My 14 inch MacBook sits at eye level now. The silicone pads hold it well, but typing directly on the laptop makes the stand wobble slightly." },
+      { id: "ls2", reviewer: "Ramesh P.", rating: 5, date: "2026-04-02", verified: false, title: "Perfect item", body: "Perfect item, fast delivery, worth every penny, excellent quality and highly recommended." },
+      { id: "ls3", reviewer: "June A.", rating: 3, date: "2026-04-07", verified: true, title: "Not for heavy 17 inch laptops", body: "It handles my 13 inch office laptop well. My 17 inch gaming laptop feels unstable on the top height setting." },
+      { id: "ls4", reviewer: "Nolan G.", rating: 5, date: "2026-04-03", verified: false, title: "Excellent quality", body: "Excellent quality laptop stand, value for money, premium aluminum, must buy." },
+      { id: "ls5", reviewer: "Aarti S.", rating: 4, date: "2026-04-12", verified: true, title: "Cooling helped", body: "Laptop fan noise reduced during Zoom calls because airflow is better. The hinge is stiff enough after three weeks of daily use." },
+      { id: "ls6", reviewer: "Mateo L.", rating: 2, date: "2026-04-15", verified: true, title: "Rubber pad came off", body: "One front rubber pad peeled off after 10 days, so the laptop started sliding when I adjusted the angle." },
+      { id: "ls7", reviewer: "Farhan Q.", rating: 4, date: "2026-04-18", verified: true, title: "Works best with external keyboard", body: "For posture it is good. You need an external keyboard because direct typing shakes the screen at higher angles." },
+      { id: "ls8", reviewer: "Elise B.", rating: 5, date: "2026-04-04", verified: false, title: "Best stand", body: "Best stand, amazing product, very useful, premium quality and value for money." },
+      { id: "ls9", reviewer: "Sourav C.", rating: 1, date: "2026-04-22", verified: true, title: "Received bent piece", body: "The left arm was bent out of the box and my laptop did not sit flat. Packaging had no foam around the metal stand." },
+      { id: "ls10", reviewer: "Mila T.", rating: 4, date: "2026-04-25", verified: true, title: "Portable but edges are sharp", body: "It folds into my backpack easily. The side edges feel a little sharp when I unpack it quickly." },
+    ],
+    qa: [
+      { question: "Can I type on laptop while using it?", answer: "Possible, but an external keyboard is recommended for stability." },
+    ],
+  },
+  {
+    id: "powerbank-chargecore-20k",
+    platform: "Amazon",
+    title: "ChargeCore 20000mAh Power Bank with 22.5W USB-C Output",
+    price: "$32.99",
+    rating: 4.6,
+    reviewCount: 2744,
+    category: "Power Bank",
+    tags: ["power bank", "battery", "charging", "mah", "usb-c", "heat", "capacity", "travel"],
+    sellerClaims: [
+      "True 20000mAh high-capacity backup",
+      "22.5W fast charging output",
+      "Airline-safe travel battery",
+      "Charges three devices at once",
+    ],
+    bullets: [
+      "USB-C input and output",
+      "LED percentage indicator",
+      "Two USB-A ports",
+      "Low-current mode for earbuds and watches",
+    ],
+    imageLabel: "power bank",
+    imageTone: "mint",
+    reviews: [
+      { id: "pb1", reviewer: "Kunal V.", rating: 4, date: "2026-03-04", verified: true, title: "Two phone charges, not three", body: "It charged my iPhone 15 from 10% to full twice and still had 18% left. I would not call it three full charges." },
+      { id: "pb2", reviewer: "Rita L.", rating: 5, date: "2026-03-01", verified: false, title: "Amazing powerbank", body: "Amazing powerbank, excellent product, best backup, highly recommended, value for money." },
+      { id: "pb3", reviewer: "Hector M.", rating: 2, date: "2026-03-10", verified: true, title: "Warm with laptop charging", body: "It gets warm when charging my iPad and phone together. The USB-C output showed 18W on my meter, not 22.5W." },
+      { id: "pb4", reviewer: "Sanjana P.", rating: 4, date: "2026-03-14", verified: true, title: "Good travel backup", body: "Used it on a 9 hour train ride. LED percentage is accurate enough and low-current mode charged my earbuds case." },
+      { id: "pb5", reviewer: "Luke D.", rating: 5, date: "2026-03-02", verified: false, title: "Must buy", body: "Must buy power bank, premium quality, very useful, perfect battery backup." },
+      { id: "pb6", reviewer: "Nisha H.", rating: 3, date: "2026-03-17", verified: true, title: "Heavy for pockets", body: "Capacity is useful but it is heavy in jeans pocket. Fine for backpack travel." },
+      { id: "pb7", reviewer: "Aiden F.", rating: 1, date: "2026-03-22", verified: true, title: "USB-C port loose", body: "After three weeks the USB-C port became loose and charging disconnected if the cable moved." },
+      { id: "pb8", reviewer: "Mona S.", rating: 5, date: "2026-03-02", verified: false, title: "Value for money", body: "Value for money, best quality, fast charging, highly recommended product." },
+      { id: "pb9", reviewer: "Chen W.", rating: 4, date: "2026-03-26", verified: true, title: "Airline security was fine", body: "Carried it through airport security twice. The printed Wh rating was visible, so no issue at check-in." },
+      { id: "pb10", reviewer: "Tara G.", rating: 2, date: "2026-03-28", verified: true, title: "Slow recharge", body: "Charging my phone is quick, but recharging the power bank itself took almost 7 hours with a 20W adapter." },
+    ],
+  },
+  {
+    id: "mouse-rapidstrike-rgb",
+    platform: "Flipkart",
+    title: "RapidStrike RGB Gaming Mouse with 12K DPI Sensor",
+    price: "₹799",
+    rating: 4.2,
+    reviewCount: 1640,
+    category: "Gaming Mouse",
+    tags: ["gaming mouse", "mouse", "dpi", "click", "rgb", "sensor", "cable", "scroll wheel"],
+    sellerClaims: [
+      "12K DPI esports-grade sensor",
+      "20 million click durability",
+      "No-lag braided cable",
+      "Customizable RGB modes",
+    ],
+    bullets: [
+      "Six programmable buttons",
+      "Ergonomic shell for palm grip",
+      "Onboard DPI switch",
+      "Windows companion software",
+    ],
+    imageLabel: "gaming mouse",
+    imageTone: "violet",
+    reviews: [
+      { id: "gm1", reviewer: "Kabir A.", rating: 4, date: "2026-02-04", verified: true, title: "Sensor is stable in Valorant", body: "At 800 DPI the cursor feels stable and the side buttons are easy to reach. The software only worked after reinstalling once." },
+      { id: "gm2", reviewer: "Mira C.", rating: 5, date: "2026-02-01", verified: false, title: "Best gaming mouse", body: "Best gaming mouse, RGB is awesome, must buy, excellent quality, value for money." },
+      { id: "gm3", reviewer: "Jon P.", rating: 2, date: "2026-02-12", verified: true, title: "Scroll wheel squeaks", body: "After 18 days the scroll wheel started squeaking and sometimes jumps one notch backward in Chrome." },
+      { id: "gm4", reviewer: "Sahil D.", rating: 3, date: "2026-02-14", verified: true, title: "Good clicks, stiff cable", body: "Left and right clicks feel crisp, but the braided cable is stiff and drags on my mousepad unless I use a bungee." },
+      { id: "gm5", reviewer: "Lily R.", rating: 5, date: "2026-02-02", verified: false, title: "Excellent mouse", body: "Excellent mouse, very useful, premium gaming quality, highly recommended for everyone." },
+      { id: "gm6", reviewer: "Rohan T.", rating: 4, date: "2026-02-18", verified: true, title: "Palm grip is comfortable", body: "My hand is 19cm and palm grip feels comfortable for two hour sessions. RGB button cycles modes but software is basic." },
+      { id: "gm7", reviewer: "Ada W.", rating: 1, date: "2026-02-21", verified: true, title: "Double-click problem", body: "The left button started double-clicking after five weeks. Support asked for a video before replacement." },
+      { id: "gm8", reviewer: "Vik M.", rating: 5, date: "2026-02-02", verified: false, title: "Must buy", body: "Must buy, best product, perfect DPI, premium RGB, value for money." },
+      { id: "gm9", reviewer: "Tanya S.", rating: 4, date: "2026-02-25", verified: true, title: "Good for budget setup", body: "Works well on my cloth pad and the DPI button is useful. It is light, but plastic sides feel hollow." },
+      { id: "gm10", reviewer: "Omar N.", rating: 2, date: "2026-02-28", verified: true, title: "Software flagged by antivirus", body: "The mouse works plug-and-play, but the downloaded software triggered a warning on my antivirus, so I skipped custom macros." },
+    ],
+  },
+  {
+    id: "lamp-lumidock-study",
+    platform: "Amazon",
+    title: "LumiDock LED Study Lamp with Wireless Charger",
+    price: "$42.00",
+    rating: 4.5,
+    reviewCount: 934,
+    category: "Study Lamp",
+    tags: ["study lamp", "lamp", "led", "wireless charger", "brightness", "desk", "flicker", "hinge"],
+    sellerClaims: [
+      "Eye-care flicker-free LED panel",
+      "15W wireless phone charging base",
+      "Five brightness levels and three color modes",
+      "Adjustable aluminum hinge",
+    ],
+    bullets: [
+      "Touch controls",
+      "USB-C power adapter included",
+      "Memory mode restores last brightness",
+      "Foldable desk footprint",
+    ],
+    imageLabel: "study lamp",
+    imageTone: "cyan",
+    reviews: [
+      { id: "sl1", reviewer: "Pallavi M.", rating: 4, date: "2026-01-08", verified: true, title: "Nice light for late study", body: "Warm mode is comfortable for reading at night. The base is heavy enough and does not slide on my desk." },
+      { id: "sl2", reviewer: "Ben K.", rating: 5, date: "2026-01-04", verified: false, title: "Amazing lamp", body: "Amazing lamp, best quality, excellent product, highly recommended, value for money." },
+      { id: "sl3", reviewer: "Esha R.", rating: 3, date: "2026-01-12", verified: true, title: "Wireless charging is picky", body: "My iPhone charges only if placed exactly in the center. With a thick case it keeps starting and stopping." },
+      { id: "sl4", reviewer: "Noel H.", rating: 2, date: "2026-01-15", verified: true, title: "Hinge loosened", body: "After three weeks the hinge became loose and the lamp head slowly dropped from the highest angle." },
+      { id: "sl5", reviewer: "Ritu G.", rating: 5, date: "2026-01-05", verified: false, title: "Perfect study lamp", body: "Perfect study lamp, fast charging, premium LED light, must buy and very useful." },
+      { id: "sl6", reviewer: "Chris D.", rating: 4, date: "2026-01-18", verified: true, title: "No flicker seen on camera", body: "I checked with my phone slow-motion camera and did not see flicker. Brightness level 4 is enough for sketching." },
+      { id: "sl7", reviewer: "Manav J.", rating: 2, date: "2026-01-22", verified: true, title: "Adapter buzzes faintly", body: "The included adapter makes a faint buzzing sound at night. The lamp itself is quiet, but I changed the adapter." },
+      { id: "sl8", reviewer: "Sofia L.", rating: 5, date: "2026-01-05", verified: false, title: "Highly recommended", body: "Highly recommended LED lamp, best product, great quality, value for money." },
+      { id: "sl9", reviewer: "Arun P.", rating: 4, date: "2026-01-25", verified: true, title: "Good controls", body: "Touch controls are responsive and memory mode works after unplugging. The glossy base shows fingerprints." },
+      { id: "sl10", reviewer: "Paula V.", rating: 1, date: "2026-01-28", verified: true, title: "Charger stopped", body: "Wireless charger stopped detecting my Pixel after 12 days, though the lamp light still works." },
+    ],
+  },
+];
+
+const publicLaunchProducts: ProductDemo[] = [
+  {
+    id: "shaker-fitseal",
+    platform: "Other",
+    title: "Leak-Resistant Protein Shaker Bottle with Mixer Ball",
+    price: "Sample",
+    rating: 4.1,
+    reviewCount: 12,
+    category: "Protein Shaker Bottle",
+    tags: ["protein shaker", "shaker", "bottle", "lid", "leak", "odor", "gym"],
+    sellerClaims: ["Leak-resistant screw lid", "Odor-safe plastic", "Measurement marks", "Mixer ball for smooth protein shakes"],
+    bullets: ["700ml bottle", "BPA-free body", "Dishwasher-safe top rack", "Carry loop on lid"],
+    imageLabel: "shaker bottle",
+    imageTone: "mint",
+    reviews: sampleReviews("ps", "protein shaker bottle", "the lid leaked when shaken hard", "post-workout protein shakes"),
+    qa: [{ question: "Can it go in a dishwasher?", answer: "Top-rack dishwasher cleaning is usually safest for shaker bottles." }],
+  },
+  {
+    id: "shoes-runstride",
+    platform: "Myntra",
+    title: "RunStride Cushioned Everyday Running Shoes",
+    price: "Sample",
+    rating: 4.2,
+    reviewCount: 12,
+    category: "Shoes",
+    tags: ["shoes", "running shoes", "sneakers", "sole", "size", "cushion", "grip"],
+    sellerClaims: ["Lightweight running foam", "Breathable mesh upper", "Slip-resistant outsole", "True-to-size fit"],
+    bullets: ["Daily walking and casual running", "Removable insole", "Lace-up closure", "Padded heel collar"],
+    imageLabel: "running shoes",
+    imageTone: "violet",
+    reviews: sampleReviews("rs", "running shoe", "the sole wore faster on one side", "daily 4km walks"),
+    qa: [{ question: "Is it good for marathon training?", answer: "It is a casual running shoe sample, not a specialist race shoe." }],
+  },
+  {
+    id: "book-clearthinking",
+    platform: "Other",
+    title: "Clear Thinking Paperback Productivity Book",
+    price: "Sample",
+    rating: 4.0,
+    reviewCount: 12,
+    category: "Book",
+    tags: ["book", "paperback", "pages", "printing", "writing", "productivity"],
+    sellerClaims: ["Practical productivity framework", "Readable paperback edition", "Action exercises after every chapter"],
+    bullets: ["240-page paperback", "Black-and-white printing", "Workbook prompts", "Beginner-friendly structure"],
+    imageLabel: "paperback book",
+    imageTone: "amber",
+    reviews: sampleReviews("bk", "paperback book", "some pages had light printing", "weekly planning exercises"),
+    qa: [{ question: "Is this an advanced productivity system?", answer: "It is written for general readers and beginners." }],
+  },
+  {
+    id: "appliance-quickmix",
+    platform: "Walmart",
+    title: "QuickMix Compact Kitchen Blender for Smoothies",
+    price: "Sample",
+    rating: 4.3,
+    reviewCount: 12,
+    category: "Kitchen Appliance",
+    tags: ["kitchen appliance", "blender", "jar", "motor", "smoothie", "noise", "cleaning"],
+    sellerClaims: ["450W blending motor", "Crushes ice for smoothies", "Dishwasher-safe jar", "Compact countertop footprint"],
+    bullets: ["Two speed modes", "600ml blending jar", "Safety lock lid", "Cord wrap base"],
+    imageLabel: "kitchen blender",
+    imageTone: "cyan",
+    reviews: sampleReviews("kb", "compact blender", "the motor smelled warm with frozen fruit", "morning smoothies"),
+    qa: [{ question: "Can it crush ice daily?", answer: "Small ice cubes work better than large frozen blocks in compact blenders." }],
+  },
+];
+
+demoProducts.push(...additionalProducts, ...publicLaunchProducts);
+demoProducts.forEach((product) => {
+  product.analysisMode = "Sample analysis";
+  product.demoNote =
+    product.demoNote?.replace(/Winning demo sample: /, "Sample analysis: ").replace(/Marketplace-style fallback sample/, "Sample analysis") ||
+    "Sample analysis template for public onboarding. It is not presented as live marketplace data.";
+  ensureSampleDepth(product);
+  product.reviewCount = product.reviews.length;
+});
 
 export const winningDemoProduct = demoProducts[0];

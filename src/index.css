@@ -88,3 +88,31 @@ button {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@media print {
+  header,
+  footer,
+  button,
+  input,
+  textarea,
+  select {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .glass,
+  .premium-panel {
+    border: 1px solid #d1d5db !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    color: #111827 !important;
+  }
+
+  * {
+    color: #111827 !important;
+  }
+}

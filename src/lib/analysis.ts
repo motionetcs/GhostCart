@@ -132,6 +132,11 @@ const ISSUE_TAXONOMY: Record<string, string[]> = {
   "Packaging, delivery, or return": ["packaging", "box", "leaked", "return", "replacement", "wrong item", "damaged"],
   "Skin irritation or smell": ["skin", "irritated", "red", "bumps", "smell", "scent", "stings", "fragrance"],
   "Unsupported performance claim": ["claim", "says", "listing", "medical", "100w", "noise cancelling", "safe"],
+  "Camera, display, or sensor claim": ["camera", "display", "fingerprint", "sensor", "green tint", "dpi"],
+  "Desk hardware stability": ["wobble", "unstable", "hinge", "pad", "typing", "sliding", "bent"],
+  "Port, cable, or connector failure": ["usb-c", "port", "cable", "connector", "loose", "disconnect"],
+  "Software or setup friction": ["software", "app", "antivirus", "setup", "reinstalling"],
+  "Wireless charging issue": ["wireless charging", "wireless charger", "detecting", "case", "starting and stopping"],
 };
 
 const HIGH_SEVERITY_ISSUES = new Set([
@@ -147,6 +152,11 @@ const GHOST_TERMS_BY_CATEGORY: Record<string, string[]> = {
   smartwatch: ["pillow", "bedsheet", "charger brick", "serum", "zipper", "fabric soft", "shampoo"],
   backpack: ["serum", "earbud", "anc", "smartwatch", "vitamin"],
   skincare: ["charger", "usb-c", "laptop", "earbud", "backpack", "zipper", "macbook"],
+  smartphone: ["pillow", "bedsheet", "zipper", "serum", "lamp", "mouse", "backpack"],
+  stand: ["serum", "skin", "earbud", "camera", "shampoo"],
+  powerbank: ["serum", "skin", "zipper", "bedsheet", "mousepad"],
+  mouse: ["serum", "skin", "bedsheet", "charger brick", "lamp head"],
+  lamp: ["serum", "skin", "gaming mouse", "backpack", "earbud"],
 };
 
 interface SharedReviewSignals {
@@ -229,6 +239,11 @@ function mismatchTerms(product: ProductDemo, text: string) {
     category.includes("charger") ? "charger" :
     category.includes("earbud") ? "earbuds" :
     category.includes("watch") ? "smartwatch" :
+    category.includes("smartphone") ? "smartphone" :
+    category.includes("stand") ? "stand" :
+    category.includes("power bank") ? "powerbank" :
+    category.includes("mouse") ? "mouse" :
+    category.includes("lamp") ? "lamp" :
     category.includes("backpack") ? "backpack" :
     category.includes("skin") || category.includes("serum") ? "skincare" :
     "";
@@ -423,6 +438,9 @@ function analyzeReview(
   else if (trustScore >= 65 && groundednessScore >= 42) category = "Grounded";
   else if (suspicionScore >= 58 && groundednessScore < 42) category = "Suspicious";
 
+  const detailQuality = groundednessScore >= 68 ? "High" : groundednessScore >= 38 ? "Medium" : "Low";
+  const riskLevel = suspicionScore >= 68 || category === "Ghost" ? "High" : suspicionScore >= 42 ? "Medium" : "Low";
+
   if (!flags.length && category === "Grounded") {
     pushFlag(flags, "Grounded buyer evidence", "Review contains concrete product-use details and does not resemble nearby review noise.", "low");
   }
@@ -434,6 +452,8 @@ function analyzeReview(
     trustScore: Math.round(trustScore),
     category,
     sentiment,
+    detailQuality,
+    riskLevel,
     flags,
     evidence: evidence.slice(0, 5),
     similarReviewIds,
@@ -527,7 +547,7 @@ function analyzeClaims(product: ProductDemo, reviews: ReviewAnalysis[]): ClaimSi
             ? "Only one grounded review appears to support this claim."
             : status === "Contradicted"
               ? "Grounded buyer text raises friction with this claim."
-              : "No strong grounded review support was found in the sample.",
+              : "No strong grounded review support was found in the review set.",
     };
   });
 }
@@ -592,7 +612,7 @@ function buildPatternInsights(
     {
       title: "Repeated wording",
       value: `${repetitionScore}/100`,
-      detail: genericReviews || burstReviews ? "Repeated praise and burst timing are visible in the review set." : "No major copy-pattern cluster dominates the sample.",
+      detail: genericReviews || burstReviews ? "Repeated praise and burst timing are visible in the review set." : "No major copy-pattern cluster dominates the review set.",
       tone: repetitionScore > 45 ? "risk" : repetitionScore > 22 ? "watch" : "good",
     },
     {
@@ -637,10 +657,9 @@ function confidenceFor(reviewCount: number) {
 }
 
 function verdict(score: number, ghostPct: number) {
-  if (score >= 78 && ghostPct < 8) return "Likely trustworthy" as const;
-  if (score >= 58) return "Mixed signals" as const;
-  if (score >= 40) return "Check carefully" as const;
-  return "High risk" as const;
+  if (score >= 78 && ghostPct < 8) return "Low review-risk" as const;
+  if (score >= 50) return "Mixed review signals" as const;
+  return "High review-risk" as const;
 }
 
 export function analyzeProduct(product: ProductDemo): ProductAnalysis {
@@ -686,13 +705,13 @@ export function analyzeProduct(product: ProductDemo): ProductAnalysis {
   const patternInsights = buildPatternInsights(reviews, issueMap, claimSignals, repetitionScore);
 
   const summary =
-    finalVerdict === "Likely trustworthy"
+    product.reviews.length < 3
+      ? "There is not enough review data for a confident product-level pattern read. Paste more reviews for a stronger signal."
+      : finalVerdict === "Low review-risk"
       ? "Most review evidence looks grounded, with manageable suspicious noise."
-      : finalVerdict === "Mixed signals"
+      : finalVerdict === "Mixed review signals"
         ? "The product has useful buyer evidence, but suspicious review noise should be separated from real issues."
-        : finalVerdict === "Check carefully"
-          ? "Several review-trust risks appear in the sample. Use the buyer issue map before buying."
-          : "The review set contains heavy trust noise, product mismatch, or unsupported claims.";
+        : "The review set contains heavy trust noise, product mismatch, repeated low-detail praise, or unsupported claims.";
 
   return {
     product,
@@ -707,7 +726,7 @@ export function analyzeProduct(product: ProductDemo): ProductAnalysis {
     unsupportedClaimCount,
     qaRiskScore,
     confidence: confidenceFor(product.reviews.length),
-    finalVerdict,
+    finalVerdict: product.reviews.length < 3 ? "Not enough review data" : finalVerdict,
     summary,
     issueMap,
     claimSignals,

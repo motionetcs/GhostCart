@@ -9,10 +9,10 @@ const categoryStyles: Record<ReviewCategory, string> = {
 };
 
 const verdictStyles: Record<FinalVerdict, string> = {
-  "Likely trustworthy": "border-emerald-300/30 bg-emerald-300/12 text-emerald-100",
-  "Mixed signals": "border-cyan-300/30 bg-cyan-300/12 text-cyan-100",
-  "Check carefully": "border-amber-300/30 bg-amber-300/12 text-amber-100",
-  "High risk": "border-rose-300/35 bg-rose-300/12 text-rose-100",
+  "Low review-risk": "border-emerald-300/30 bg-emerald-300/12 text-emerald-100",
+  "Mixed review signals": "border-cyan-300/30 bg-cyan-300/12 text-cyan-100",
+  "High review-risk": "border-rose-300/35 bg-rose-300/12 text-rose-100",
+  "Not enough review data": "border-amber-300/30 bg-amber-300/12 text-amber-100",
 };
 
 export function Pill({ children, className = "" }: { children: ReactNode; className?: string }) {

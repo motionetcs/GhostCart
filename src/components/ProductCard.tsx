@@ -16,7 +16,7 @@ export function ProductCard({
 }) {
   const analysis: ProductAnalysis = analyzeProduct(product);
   const riskTone =
-    analysis.finalVerdict === "High risk" || analysis.finalVerdict === "Check carefully"
+    analysis.finalVerdict === "High review-risk" || analysis.finalVerdict === "Not enough review data"
       ? "text-ghost-amber"
       : "text-ghost-mint";
 
@@ -33,6 +33,9 @@ export function ProductCard({
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <MarketplaceLogo platform={product.platform} compact />
+            <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+              {product.analysisMode || "Sample analysis"}
+            </span>
             <span className="inline-flex items-center gap-1 text-xs text-white/60">
               <Star className="h-3.5 w-3.5 fill-ghost-amber text-ghost-amber" aria-hidden="true" />
               {product.rating} · {product.reviewCount.toLocaleString()} reviews

@@ -1,14 +1,16 @@
-export type Platform = "Amazon" | "Flipkart" | "Other";
+export type Platform = "Amazon" | "Flipkart" | "Meesho" | "Myntra" | "Walmart" | "Best Buy" | "Other";
 
 export type ReviewCategory = "Grounded" | "Suspicious" | "Ghost" | "Unclear";
 
 export type Sentiment = "Positive" | "Neutral" | "Negative" | "Mixed";
 
 export type FinalVerdict =
-  | "Likely trustworthy"
-  | "Mixed signals"
-  | "Check carefully"
-  | "High risk";
+  | "Low review-risk"
+  | "Mixed review signals"
+  | "High review-risk"
+  | "Not enough review data";
+
+export type AnalysisMode = "Sample analysis" | "User-provided reviews" | "Imported reviews";
 
 export interface Review {
   id: string;
@@ -40,6 +42,7 @@ export interface ProductDemo {
   imageTone: "mint" | "cyan" | "amber" | "rose" | "violet";
   reviews: Review[];
   qa?: QAItem[];
+  analysisMode?: AnalysisMode;
   demoNote?: string;
 }
 
@@ -56,6 +59,8 @@ export interface ReviewAnalysis {
   trustScore: number;
   category: ReviewCategory;
   sentiment: Sentiment;
+  detailQuality: "Low" | "Medium" | "High";
+  riskLevel: "Low" | "Medium" | "High";
   flags: ReviewFlag[];
   evidence: string[];
   similarReviewIds: string[];
@@ -117,7 +122,9 @@ export interface ProductAnalysis {
 
 export interface ManualImportInput {
   title: string;
+  category: string;
   platform: Platform;
+  averageRating: string;
   sellerClaims: string;
   reviewsText: string;
 }
